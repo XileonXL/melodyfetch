@@ -55,10 +55,9 @@ def read_file(filename):
 def main():
     layout = [
         [sg.Text('Text:')],
-        [sg.InputText(key='-TEXT-', enable_events=True)],
+        [sg.InputText(key='-TEXT-', enable_events=True), sg.Button('Download Song')],
         [sg.Text('Choose folder:')],
         [sg.Listbox(values=get_folders_in_current_dir(), size=(30, 6), key='-FOLDERS-'), sg.Button('Upload txt file')],
-        [sg.Button('Download Song')],
         [sg.Text('Downloaded songs / Total songs:'), sg.Text('0 / 0', key='-COUNTER-')],
         [sg.Button('Submit', visible=False, bind_return_key=True)],
         [sg.Table(
