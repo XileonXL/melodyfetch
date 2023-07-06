@@ -26,7 +26,7 @@ def download_song(window, song, selected_folder, downloaded_songs, total_songs, 
 
         try:
             info = ydl.extract_info(query, download=False)
-            if 'entries' in info:
+            if info is not None and info.get('entries', {}):
                 title = info['entries'][0].get('title')
                 songs_table[downloaded_songs[0]][0] = title
         except:
