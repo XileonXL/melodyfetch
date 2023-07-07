@@ -23,3 +23,18 @@ Run the program
 python3 melodyfetch.py
 ```
 
+## Windows
+
+You have three options here.
+
+### Easiest
+
+Download the melodyfetch.exe binary file and just run it.
+
+### Easy
+
+Install python and run it using *command line interface* as you would do for Linux
+
+### Medium
+
+Create your own binary file.
