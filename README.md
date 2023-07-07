@@ -7,7 +7,7 @@ MelodyFetch is an utility to download music from youtube with a basic interface.
 
 The program is able to download all the songs you can provide at the same time, so you don't have to wait until it finishes downloading a song.
 
-All the information is updated in a information table in the interface.
+The bottom table in the interface will display the current state information for song downloads.
 
 ## Instructions
 
