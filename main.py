@@ -95,7 +95,7 @@ def main():
                 else:
                     filepath = sg.popup_get_file('Select a txt file', file_types=(("Text files", "*.txt"),))
                     if filepath:
-                        filename = os.path.basename(filepath)
+                        filename = os.path.abspath(filepath)
                         lines = read_file(filename)
                         songs = lines
 
