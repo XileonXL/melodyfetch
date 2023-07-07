@@ -17,8 +17,7 @@ def download_song(window, song, selected_folder, downloaded_songs, total_songs, 
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
             'preferredquality': '192',
-        }],
-        'extract_flat': 'in_playlist'
+        }]
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         query = song if (validate_url(song) and 'youtube' in song) else f'ytsearch:{song} lyrics'
@@ -35,7 +34,7 @@ def download_song(window, song, selected_folder, downloaded_songs, total_songs, 
             window['-TABLE-'].update(songs_table)
 
             try:
-                ydl.download(query)
+                ydl.download([query])
                 status = 'Completed'
             except Exception:
                 status = 'Failed'
