@@ -45,5 +45,12 @@ Install [python](https://www.python.org/downloads/windows/) and run it using *co
 
 ### Medium
 
-Create your own binary file with the following steps:
-1. 
+Create your own binary file:
+```
+pip install pyinstaller
+python -m venv melodyfetch-venv
+.\melodyfetch-venv\Scripts\activate
+pyinstaller -F melodyfetch.py --paths=.\melodyfetch-venv\Lib\site-packages
+```
+
+This will generate different files, but the most important is in *dist* folder, which is the *melodyfetch.exe*.
