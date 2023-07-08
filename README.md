@@ -31,7 +31,7 @@ python3 melodyfetch.py
 ## Windows
 
 By default, if you don't have [FFmpeg](https://ffmpeg.org/download.html) installed, it will download the audio in mp4 format instead of mp3. This shouldn't be a problem for you,
-but if you need the specific mp3 format you should need to download the utility and add it in PATH environment variable.
+but if you need the specific mp3 format you must download the utility and add it in PATH environment variable.
 
 You have three options here.
 
@@ -45,4 +45,5 @@ Install [python](https://www.python.org/downloads/windows/) and run it using *co
 
 ### Medium
 
-Create your own binary file with the following steps
+Create your own binary file with the following steps:
+1. 
