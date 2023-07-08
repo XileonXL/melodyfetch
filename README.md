@@ -5,9 +5,18 @@ MelodyFetch is an utility to download music in mp3 format from youtube with a ba
 * Download song using a phrase (this will search in youtube and it will get the first result which matches with)
 * Download all songs written in a .txt file (one per line)
 
+The bottom table in the interface will display the current state information for song downloads:
+
+<p align="center">
+  <img src="img/basic-interface.png" alt="Basic interface">
+</p>
+
+
 The program is able to download all the songs you can provide at the same time, so you don't have to wait until it finishes downloading a song.
 
-The bottom table in the interface will display the current state information for song downloads.
+<p align="center">
+  <img src="img/songs.png" alt="Songs">
+</p>
 
 ## Instructions
 
