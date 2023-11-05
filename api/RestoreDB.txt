@@ -1,0 +1,1 @@
+db.create_table("artists", "id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE")
