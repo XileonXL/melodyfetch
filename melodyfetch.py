@@ -1,62 +1,23 @@
 import os
 import PySimpleGUI as sg
-import yt_dlp
-from validators import url as validate_url
 import threading
-
-def get_folders_in_current_dir():
-    folders = [folder for folder in os.listdir() if os.path.isdir(folder)]
-    return folders
-
-def download_song(window, song, selected_folder, downloaded_songs, total_songs, songs_table):
-    window['-COUNTER-'].update(f'{downloaded_songs[0]} / {total_songs}')
-    ydl_opts = {
-        'outtmpl': f'{selected_folder}/%(title)s.%(ext)s',
-        'format': 'bestaduio/best',
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }]
-    }
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        query = song if (validate_url(song) and 'youtube' in song) else f'ytsearch:{song} lyrics'
-        songs_table.append([song.strip(), 'Downloading'])
-
-        try:
-            info = ydl.extract_info(query, download=False)
-            if info is not None and info.get('entries', {}):
-                title = info['entries'][0].get('title')
-                songs_table[downloaded_songs[0]][0] = title
-        except:
-            status = 'Failed'
-        else:
-            window['-TABLE-'].update(songs_table)
-
-            try:
-                ydl.download([query])
-                status = 'Completed'
-            except Exception:
-                status = 'Failed'
-            else: 
-                songs_table[downloaded_songs[0]][1] = status
-                window['-TABLE-'].update(songs_table)
-                downloaded_songs[0] += 1
-                window['-COUNTER-'].update(f'{downloaded_songs[0]} / {total_songs}')
-
-def read_file(filename):
-    lines = []
-    with open(filename, 'r') as f:
-        for line in f:
-            lines.append(line.strip())
-    return lines
+from systemUtilities import get_folders_in_current_dir, read_file
+from songUtilities import download_song, get_suggested_songs
 
 def main():
     layout = [
         [sg.Text('Text:')],
         [sg.InputText(key='-TEXT-', enable_events=True), sg.Button('Download Song')],
         [sg.Text('Choose folder:')],
-        [sg.Listbox(values=get_folders_in_current_dir(), size=(30, 6), key='-FOLDERS-'), sg.Button('Upload txt file')],
+        [
+            sg.Column([
+                [sg.Listbox(values=get_folders_in_current_dir(), size=(30, 6), key='-FOLDERS-')],
+            ], element_justification='c'),
+            sg.Column([
+                [sg.Button('Download from txt file')],
+                [sg.Button('Get suggestions from txt file')],
+            ], element_justification='c'),
+        ],
         [sg.Text('Downloaded songs / Total songs:'), sg.Text('0 / 0', key='-COUNTER-')],
         [sg.Button('Submit', visible=False, bind_return_key=True)],
         [sg.Table(
@@ -84,7 +45,7 @@ def main():
 
         if event == sg.WINDOW_CLOSED:
             break
-        elif event in ['Download Song', 'Submit', 'Upload txt file']:
+        elif event in ['Download Song', 'Submit', 'Download from txt file', 'Get suggestions from txt file']:
             selected_folders = values['-FOLDERS-']
 
             if selected_folders: 
@@ -96,7 +57,33 @@ def main():
                     if filepath:
                         filename = os.path.abspath(filepath)
                         lines = read_file(filename)
-                        songs = lines
+                        if event == 'Download from txt file':
+                            songs = lines
+                        else:
+                            suggested_songs = get_suggested_songs(lines)
+
+                            layout_selected_songs = [
+                                [sg.Text('Select the songs that you want to download')]
+                            ]
+
+                            col_layout = []
+                            for suggested_song in suggested_songs:
+                                col_layout.append([sg.Checkbox(suggested_song, key=suggested_song)])
+                            layout_selected_songs.append([sg.Column(col_layout, scrollable=True, vertical_scroll_only=True, size=(300, 300))])
+                            layout_selected_songs.append([sg.Button('OK'), sg.Button('Cancel')])
+
+                            window_selected_songs = sg.Window('Select songs', layout_selected_songs, finalize=True, resizable=True)
+
+                            while True:
+                                event, values = window_selected_songs.read()
+
+                                if event in (sg.WINDOW_CLOSED, 'Cancel'):
+                                    break
+                                elif event == 'OK':
+                                    songs = [suggested_song for suggested_song in suggested_songs if values.get(suggested_song)]
+                                    break
+
+                            window_selected_songs.close()
 
                 if songs:
                     total_songs += len(songs)
